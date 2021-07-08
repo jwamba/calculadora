@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------
+Test set: com.wit.calculadoraapi.CalculadoraapiApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 3.533 s <<< FAILURE! - in com.wit.calculadoraapi.CalculadoraapiApplicationTests
+contextLoads  Time elapsed: 0.003 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'rabbitMQConfig': Injection of autowired dependencies failed; nested exception is java.lang.IllegalArgumentException: Could not resolve placeholder 'javainuse.rabbitmq.queue' in value "${javainuse.rabbitmq.queue}"
+Caused by: java.lang.IllegalArgumentException: Could not resolve placeholder 'javainuse.rabbitmq.queue' in value "${javainuse.rabbitmq.queue}"
+
