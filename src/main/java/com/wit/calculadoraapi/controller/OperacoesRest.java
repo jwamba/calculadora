@@ -6,12 +6,11 @@
 package com.wit.calculadoraapi.controller;
 
 import com.wit.calculadoraapi.calculadora.Operacoes;
-import com.wit.calculadoraapi.services.RabbitMQReceiver;
 import com.wit.calculadoraapi.services.RabbitMQSender;
 import java.math.BigDecimal;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,43 +26,57 @@ public class OperacoesRest {
    
    @Autowired
    RabbitMQSender rabbitMQSender;
-
+   private static String rabbitmq ="";
+    
+    
     
     @GetMapping("/soma")
     @ResponseBody
-    public void somar(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
+    public String somar(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
         
         Operacoes op=new Operacoes(a, b);
+        op.soma();
        
         rabbitMQSender.send(op.toString());
+        return rabbitmq;
         
     }
     
     @GetMapping("/subtrai")
     @ResponseBody
-    public BigDecimal subtrair(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
+    public String subtrair(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
        
-        rabbitMQSender.send(new Operacoes(a, b).toString());
-        
-        return new Operacoes(a, b).subtracao(); 
+        Operacoes op=new Operacoes(a, b);
+        op.subtracao();
+       
+        rabbitMQSender.send(op.toString());
+        return rabbitmq;
     }
     
-    @GetMapping("/mutiplica")
+    @GetMapping("/multiplica")
     @ResponseBody
-    public BigDecimal multiplicar(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
+    public String multiplicar(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
+       Operacoes op=new Operacoes(a, b);
+        op.multiplicacao();
        
-        rabbitMQSender.send(new Operacoes(a, b).toString());
-        
-        return new Operacoes(a, b).multiplicacao(); 
+        rabbitMQSender.send(op.toString());
+        return rabbitmq;
     }
     
     @GetMapping("/divide")
     @ResponseBody
-    public BigDecimal dividir(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
+    public String dividir(@RequestParam("a") BigDecimal a,@RequestParam("b") BigDecimal b){
+       Operacoes op=new Operacoes(a, b);
+        op.divisao();
        
-        rabbitMQSender.send(new Operacoes(a, b).toString());
-        
-        return new Operacoes(a, b).divisao(); 
+        rabbitMQSender.send(op.toString());
+        return rabbitmq; 
     }
     
+    @RabbitListener(queues = "javainuse.queue")
+    public void receive(String in) {
+        rabbitmq=in;
+        System.out.println("'" + in + "'");
+    }
+   
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package com.wit.calculadoraapi.calculadora;
-
+ 
 import java.math.BigDecimal;
 import org.springframework.stereotype.Service;
 
@@ -52,7 +52,7 @@ public class Operacoes {
     
     
     public BigDecimal soma(){
-        result =a.subtract(b);
+        result =a.add(b);
         return result;
     }
     
@@ -73,7 +73,7 @@ public class Operacoes {
 
     @Override
     public String toString() {
-        return "{\n"+"\"a\": "+a+",\n \"b\": "+b+",\n \"reuslt:\" "+result+" \n }"; //To change body of generated methods, choose Tools | Templates.
+        return "{\n"+"a: "+a+",\n b: "+b+",\n reuslt: "+result+" \n }"; //To change body of generated methods, choose Tools | Templates.
     }
     
     
